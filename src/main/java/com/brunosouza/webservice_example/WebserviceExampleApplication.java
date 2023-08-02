@@ -10,6 +10,4 @@ public class WebserviceExampleApplication {
 		SpringApplication.run(WebserviceExampleApplication.class, args);
 	}
 
-
-
 }
