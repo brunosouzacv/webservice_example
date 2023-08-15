@@ -2,8 +2,11 @@ package com.brunosouza.webservice_example.services;
 
 import com.brunosouza.webservice_example.entities.User;
 import com.brunosouza.webservice_example.repositories.UserRepository;
+import com.brunosouza.webservice_example.services.exceptions.DatabaseException;
 import com.brunosouza.webservice_example.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -25,8 +28,14 @@ public class UserService {
     public User insert(User obj){
         return repository.save(obj);
     }
-    public void delete(Long id){
-        repository.deleteById(id);
+    public void delete(Long id) throws DatabaseException {
+        try {
+            repository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException(id);
+        }catch (DataIntegrityViolationException e){
+            throw new DatabaseException(e.getMessage());
+        }
     }
     public User update(Long id, User obj){
         User entity = repository.getReferenceById(id);

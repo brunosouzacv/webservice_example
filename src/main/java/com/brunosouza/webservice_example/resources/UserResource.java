@@ -2,6 +2,7 @@ package com.brunosouza.webservice_example.resources;
 
 import com.brunosouza.webservice_example.entities.User;
 import com.brunosouza.webservice_example.services.UserService;
+import com.brunosouza.webservice_example.services.exceptions.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class UserResource {
         return ResponseEntity.created(uri).body(obj);
     }
     @DeleteMapping(value="/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws DatabaseException {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
